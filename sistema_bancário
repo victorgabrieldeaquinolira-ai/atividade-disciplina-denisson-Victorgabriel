@@ -1,0 +1,101 @@
+def ler_valor(mensagem):
+    while True:
+        try:
+         valor = float(input(mensagem).replace(",", "."))
+         return valor
+        except ValueError:
+         print("Entrada invalida Digite um número valido.")
+
+titular_nome = input("Nome do titular: ")
+
+while True:
+    titular_cpf = input("CPF: ")
+    if len(titular_cpf) == 11 and titular_cpf.isdigit():
+        break
+    print("CPF inválido Deve conter exatamente 11 números.")
+while True:
+    titular_email = input("Email: ")
+    if "@" in titular_email:
+        break
+    print("Email inválido Deve conter '@'.")
+conta_numero = input("Número da conta: ")
+conta_agencia = input("Agência: ")
+while True:
+    saldo_atual = ler_valor("Saldo inicial: ")
+    if saldo_atual >= 0:
+        break
+    print("Saldo inicial não pode ser negativo.")
+#Controle
+limite_saque_valor = 500.0
+numero_saques = 0
+limite_saques = 3
+historico_operacoes = []
+while True:
+    print("\n=== conta ===")
+    print("A - extrato")
+    print("B - Saque")
+    print("C - Transferência")
+    print("D - Depósitar")
+    print("E - Sair")
+    opcao = input("Escolha uma opção: ").upper()
+#DEPÓSITO 
+    if opcao == "D":
+        valor = ler_valor("Valor do depósito: ")
+        if valor <= 0:
+            print(" valor deve ser maior que zero.")
+        else:
+            saldo_atual += valor
+            historico_operacoes.append(f"Depósito: + R$ {valor:.2f}")
+            print(f"Depósito realizado seu saldo é: R$ {saldo_atual:.2f}")
+#SAQUE 
+    elif opcao == "B":
+        valor = ler_valor("Valor do saque: ")
+        if valor <= 0:
+            print(" valor deve ser maior que zero.")
+        elif valor > saldo_atual:
+            print(" saldo insuficiente.")
+        elif valor > limite_saque_valor:
+            print(" limite máximo por saque é R$ 500.00.")
+        elif numero_saques >= limite_saques:
+            print(" limite de 3 saques atingido.")
+        else:
+            saldo_atual -= valor
+            numero_saques += 1
+            historico_operacoes.append(f"Saque: - R$ {valor:.2f}")
+            print(f"Saque realizado seu saldo é: R$ {saldo_atual:.2f}")
+#transferencia
+    elif opcao == "C":
+        nome_destino = input("Nome do destinatário: ")
+        agencia_destino = input("Agência do destinatário: ")
+        valor = ler_valor("Valor da transferência: ")
+        taxa = 2.0
+        total = valor + taxa
+
+        if valor <= 0:
+            print(" valor deve ser maior que zero.")
+        elif total > saldo_atual:
+            print("saldo insuficiente ).")
+        else:
+            saldo_atual -= total
+            historico_operacoes.append(
+                f"Transferência: - R$ {total:.2f} (Incluindo taxa)")
+            print(f"Transferência realizada para {nome_destino}!")
+            print(f"Saldo atual: R$ {saldo_atual:.2f}")
+
+#EXTRATO
+    elif opcao == "A":
+        print("\n--- SEU EXTRATO ---")
+        if not historico_operacoes:
+            print("Nenhuma operação realizada.")
+        else:
+            for i, operacao in enumerate(historico_operacoes, start=1):
+                print(f"{i}. {operacao}")
+        print("-------------------")
+        print(f"Saldo Atual: R$ {saldo_atual:.2f}")
+
+    
+    elif opcao == "E":
+        print("tenha um otimo dia Até logo.")
+        break
+    else:
+        print("Tente novamente.")
