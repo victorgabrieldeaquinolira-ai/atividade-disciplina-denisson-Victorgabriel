@@ -39,4 +39,4 @@ D → Depósito
 E → Sair
 
 📁 Arquivos do Projeto
-
+README.md
